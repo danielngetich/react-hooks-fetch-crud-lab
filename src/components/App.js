@@ -15,13 +15,18 @@ function handleDelete(question){
   fetch(`http://localhost:4000/questions/${question.id}`,{
     method:"DELETE",
   }).then(res=>res.json())
-  .then(()=>console.log("deleted"))
+  .then(()=>{
+    const updateQuiz=questions.filter((quiz)=>quiz.id!==question.id)
+    setQuestions(updateQuiz)
+  })
 }
   return (
     <main>
       <AdminNavBar onChangePage={setPage} />
-      {page === "Form" ? <QuestionForm /> : <QuestionList questions={questions} 
-      handleDelete={handleDelete}/>}
+      {page === "Form" ? <QuestionForm questions={questions} setQuestions={setQuestions} /> : <QuestionList questions={questions} 
+      handleDelete={handleDelete}
+      setQuestions={setQuestions}
+      />}
     </main>
   );
 }

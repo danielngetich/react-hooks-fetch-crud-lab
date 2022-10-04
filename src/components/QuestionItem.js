@@ -1,15 +1,21 @@
 import React from "react";
 
-function QuestionItem({ question,handleDelete}) {
-  function handleChange(question){
-    fetch(`http://localhost:4000/questions/${question/id}`,{
+function QuestionItem({ question,handleDelete,setQuestions,questions}) {
+  function handleChange(id,correctIndex){
+    fetch(`http://localhost:4000/questions/${id}`,{
       method:"PATCH",
       headers:{
         "Content-Type": "application/json"
       },
-      body:JSON.stringify({
-        correctIndex: "questions/:id"
+      body:JSON.stringify({correctIndex})
+    }).then(res=>res.json())
+    .then((patchQuiz)=>{
+      const newQuestions=questions.map((quz)=>{
+        if (quz.id===patchQuiz){
+          return patchQuiz
+        }else return quz
       })
+      setQuestions(newQuestions)
     })
     }
   const { id, prompt, answers, correctIndex } = question;
